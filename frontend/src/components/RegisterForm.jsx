@@ -1,0 +1,55 @@
+import api from '../api';
+import { useNavigate } from 'react-router-dom';
+import { ACCESS_TOKEN, REFRESH_TOKEN } from '../constants';
+import GeneralForm from './GeneralForm';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+function RegisterForm() {
+    const navigate = useNavigate();
+
+    const handleRegister = async ({ username, password, confirmPassword, email }) => {
+        if (password.length < 8) {
+            toast.error("Password must be at least 8 characters long");
+            return;
+        }
+        if (password !== confirmPassword) {
+            toast.error("Passwords do not match");
+            return;
+        }
+
+        try {
+            await api.post("api/user/register/", { username, password, confirmPassword, email });
+            const loginRes = await api.post("api/token/", { username, password });
+            localStorage.setItem(ACCESS_TOKEN, loginRes.data.access);
+            localStorage.setItem(REFRESH_TOKEN, loginRes.data.refresh);
+            navigate('/');
+        } catch (err) {
+            const data = err.response?.data;
+            if (data?.username) toast.error(data.username[0]); // if username is taken
+            else if (data?.email) toast.error(data.email[0]); // if email is invalid (note that email is optional)
+            else toast.error("An unknown error occurred"); // catch other errors
+        }
+    };
+
+    return (
+        <GeneralForm
+            mode="register"
+            title="Create Account"
+            onSubmit={handleRegister}
+            showUsername={true}
+            showPassword={true}
+            showConfirmPassword={true}
+            showEmail={true}
+            emailDescription={"Email (optional)"}
+            requireEmail={false}
+            bottomText={
+                <h6>
+                    Already have an account? Click <a href="/login">here</a> to login.
+                </h6>
+            }
+        />
+    );
+}
+
+export default RegisterForm;
