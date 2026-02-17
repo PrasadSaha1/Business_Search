@@ -95,12 +95,30 @@ FRONTEND_URL = 'http://localhost:5173'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+"""
+
+
+# postgresql://postgres:JdxzCmLLivBcDDbEmdGRGNazsPZistwD@interchange.proxy.rlwy.net:47789/railway
+
+
+DATABASES = {
+    "default":{
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "railway",
+        "USER": "postgres",
+        "PASSWORD": "JdxzCmLLivBcDDbEmdGRGNazsPZistwD",
+        "HOST": "interchange.proxy.rlwy.net",
+        "PORT": "47789",
+    }
+}
+
 
 
 # Password validation
