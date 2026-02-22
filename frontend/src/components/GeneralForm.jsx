@@ -1,7 +1,7 @@
 // This is a general form that all others will parent from
 
 import { useState } from 'react';
-import "../styles/form.css";
+import "../styles/Form.css";
 import Base from '../components/Base';
 
 function GeneralForm({
