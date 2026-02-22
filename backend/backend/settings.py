@@ -98,7 +98,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'backend.wsgi.application'
-FRONTEND_URL = 'http://localhost:5173' 
+FRONTEND_URL = 'https://business-search-frontend.onrender.com/' 
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
