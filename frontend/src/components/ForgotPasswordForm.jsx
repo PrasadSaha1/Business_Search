@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 function ForgotPasswordForm() {
     const handleForgotPasswordSubmit = async ({ username }) => {
         try {
-            const res = await api.post('http://localhost:8000/api/forgot_password/', {
+            const res = await api.post('https://business-search-s130.onrender.com/api/forgot_password/', {
                 username: username,
             });
             toast.success("An email has been sent to your address with instructions to reset your password.");

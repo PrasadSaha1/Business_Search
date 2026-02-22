@@ -7,7 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 function ForgotUsernameForm() {
     const handleForgotUsernameSubmit = async ({ email }) => {
         try {
-            const res = await api.post('http://localhost:8000/api/forgot_username/', {
+            const res = await api.post('https://business-search-s130.onrender.com/api/forgot_username/', {
                 email: email,
             });
             toast.success("An email has been sent to your address with your username(s).");

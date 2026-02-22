@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 function ContactUsForm() {
     const handleContactUsSubmit = async ({ email, subject, message }) => {
         try {
-            const res = await api.post('http://localhost:8000/api/contact_us/', {
+            const res = await api.post('https://business-search-s130.onrender.com/api/contact_us/', {
                 email: email,
                 subject: subject,
                 message: message

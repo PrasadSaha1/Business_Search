@@ -10,7 +10,7 @@ function ChangePasswordForm() {
     const handleChangePasswordSubmit = async ({ password, newPassword, confirmPassword }) => {
         try {
             console.log(password, newPassword, confirmPassword);
-            const res = await api.post('http://localhost:8000/api/change_password/', {
+            const res = await api.post('https://business-search-s130.onrender.com/api/change_password/', {
                 old_password: password,
                 new_password: newPassword,
                 confirm_password: confirmPassword,  

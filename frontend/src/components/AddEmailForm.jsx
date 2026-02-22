@@ -9,7 +9,7 @@ function AddEmailForm() {
 
     const handleAddEmailSubmit = async ({ email }) => {
         try {
-            const res = await api.post('http://localhost:8000/api/add_email/', {
+            const res = await api.post('https://business-search-s130.onrender.com/api/add_email/', {
                 email: email
             });
             navigate('/settings'); // Redirect to home page after successful change
