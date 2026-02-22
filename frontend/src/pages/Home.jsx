@@ -4,6 +4,7 @@ import { isAuthenticated } from '../components/checkAuth';
 import { getUser } from '../components/getUser';
 import { useState, useEffect, useRef } from 'react';
 import BusinessDisplay from '../components/BusinessDisplay'
+import { Link } from "react-router-dom";
 
 function AccountButtons({ isLoggedIn, name, email }) {
     if (isLoggedIn) {
@@ -16,14 +17,14 @@ function AccountButtons({ isLoggedIn, name, email }) {
         return (
             <div>
                 <h3>Create an account to get started</h3>
-                <a href="/register">
+                <Link to="/register">
                     <button className="btn btn-primary btn-lg">Create Account</button>
-                </a>
+                </Link>
 
                 <h3 style={{ marginTop: "50px" }}>Or log into an existing account</h3>
-                <a href="/login">
+                <Link to="/login">
                     <button className="btn btn-primary btn-lg">Login</button>
-                </a>
+                </Link>
             </div>
         );
     }

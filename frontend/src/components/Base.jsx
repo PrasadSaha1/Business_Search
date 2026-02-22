@@ -1,5 +1,6 @@
 // This is the base jsx file that all others while parent from
 import '../styles/Base.css'; 
+import { Link } from "react-router-dom";
 
 export default function Base({ children }) {
   return (
@@ -8,8 +9,8 @@ export default function Base({ children }) {
         <div className="header-content">
           <h1 className="brand-title">My App</h1>
           <nav className="nav-links">
-            <a href="/">Home</a>
-            <a href="/settings">Settings</a>
+            <Link to="/">Home</Link>
+            <Link to="/settings">Settings</Link>
           </nav>
         </div>
       </header>

@@ -4,6 +4,7 @@ import { ACCESS_TOKEN, REFRESH_TOKEN } from '../constants';
 import GeneralForm from './GeneralForm';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Link } from "react-router-dom";
 
 function LogInForm() {
     const navigate = useNavigate();
@@ -31,13 +32,13 @@ function LogInForm() {
             bottomText={
                 <>
                     <h6>
-                        Don't have an account? Click <a href="/register">here</a> to create one.
+                        Don't have an account? Click <Link to="/register">here</Link> to create one.
                     </h6>
                     <h6 style={{ marginTop: "15px" }}>
-                        Forgot your username? Click <a href="/forgot_username">here</a>.
+                        Forgot your username? Click <Link to="/forgot_username">here</Link>.
                     </h6>
                     <h6 style={{ marginTop: "15px" }}>
-                        Forgot your password? Click <a href="/forgot_password">here</a>.
+                        Forgot your password? Click <Link to="/forgot_password">here</Link>.
                     </h6>
                 </>
             }

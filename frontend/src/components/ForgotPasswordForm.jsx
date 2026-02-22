@@ -2,6 +2,7 @@ import api from '../api';
 import GeneralForm from './GeneralForm';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Link } from "react-router-dom";
 
 function ForgotPasswordForm() {
     const handleForgotPasswordSubmit = async ({ username }) => {
@@ -28,10 +29,10 @@ function ForgotPasswordForm() {
             bottomText={
                 <>
                     <h6>
-                        Remember your password? Log in <a href="/login">here</a>.
+                        Remember your password? Log in <Link to="/login">here</Link>.
                     </h6>
                     <h6 style={{ marginTop: "15px" }}>
-                        Forgot your username? Click <a href="/forgot_username">here</a> to retrieve it.
+                        Forgot your username? Click <Link to="/forgot_username">here</Link> to retrieve it.
                     </h6>
                 </>
             }

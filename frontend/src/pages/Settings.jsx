@@ -4,17 +4,18 @@ import api from '../api';
 import { getUser } from '../components/getUser';
 import { useState, useEffect } from 'react';
 import "../styles/Settings.css";
+import { Link } from "react-router-dom";
 
 function DetermineEmail({email}) {
   /* Determines what the text for change email should be based on if one is provided. The logic doesn't change either way */
     if (email.includes("@")) {
-        return  <a href="/change_email"> <button className="btn btn-primary btn-md mb-3">
+        return  <Link to="/change_email"> <button className="btn btn-primary btn-md mb-3">
             Change Email
-            </button> </a>
+            </button> </Link>
     } else {
-        return  <a href="/add_email"> <button className="btn btn-primary btn-md mb-3">
+        return  <Link to="/add_email"> <button className="btn btn-primary btn-md mb-3">
             Add Email
-            </button> </a>
+            </button> </Link>
     }
 }
 
@@ -64,13 +65,13 @@ export default function Settings() {
         <div className="d-flex flex-column align-items-center mt-4">
             <DetermineEmail email={email}/>
 
-            <a href="/change_username"> <button className="btn btn-warning btn-md mb-3">
+            <Link to="/change_username"> <button className="btn btn-warning btn-md mb-3">
             Change Username
-            </button> </a>
+            </button> </Link>
 
-            <a href="/change_password"> <button className="btn btn-success btn-md mb-5">
+            <Link to="/change_password"> <button className="btn btn-success btn-md mb-5">
             Change Password
-            </button> </a>
+            </button> </Link>
             
             <button onClick={handleLogout} className="btn btn-danger btn-md mb-3">
             Log Out
@@ -84,9 +85,9 @@ export default function Settings() {
 
       </div>
       <div className="d-flex justify-content-center">
-        <a href="/contact_us"> <button className="btn btn-info btn-md mb-3">
+        <Link to="/contact_us"> <button className="btn btn-info btn-md mb-3">
           Contact Us
-        </button></a>
+        </button></Link>
       </div>
     </Base>
   );

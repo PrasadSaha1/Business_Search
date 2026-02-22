@@ -3,6 +3,7 @@ import api from '../api';
 import GeneralForm from './GeneralForm';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Link } from "react-router-dom";
 
 function ResetPasswordForm() {
     const navigate = useNavigate();
@@ -40,7 +41,7 @@ function ResetPasswordForm() {
             showConfirmPassword={true}
             bottomText={
                 <h6>
-                    Back to <a href="/login">Login</a>
+                    Back to <Link to="/login">Login</Link>
                 </h6>
             }
         />

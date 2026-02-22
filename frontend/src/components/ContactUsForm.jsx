@@ -2,6 +2,7 @@ import api from '../api';
 import GeneralForm from './GeneralForm';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Link } from "react-router-dom";
 
 function ContactUsForm() {
     const handleContactUsSubmit = async ({ email, subject, message }) => {
@@ -27,7 +28,7 @@ function ContactUsForm() {
             showMessage={true}
             onSubmit={handleContactUsSubmit}
             bottomText={
-                <a className="btn btn-primary" href="/settings">Back to Settings</a>
+                <Link className="btn btn-primary" to="/settings">Back to Settings</Link>
             }
         />
     );

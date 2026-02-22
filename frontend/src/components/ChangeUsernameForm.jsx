@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import GeneralForm from './GeneralForm';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Link } from "react-router-dom";
 
 function ChangeUsernameForm() {
     const navigate = useNavigate();
@@ -32,7 +33,7 @@ function ChangeUsernameForm() {
             usernameDescription={"New Username"}
             onSubmit={handleChangeUsernameSubmit}
             bottomText={
-                <a className="btn btn-primary" href="/settings">Back</a>
+                <Link className="btn btn-primary" to="/settings">Back</Link>
             }
         />
     );

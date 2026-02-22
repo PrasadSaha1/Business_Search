@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from './constants';
+import { Link } from "react-router-dom";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL
@@ -48,7 +49,7 @@ api.interceptors.response.use(
         // Refresh token is invalid/expired — force logout
         localStorage.removeItem(ACCESS_TOKEN);
         localStorage.removeItem(REFRESH_TOKEN);
-        window.location.href = '/login';
+        window.location.href = "/";
         return Promise.reject(refreshError);
       }
     }

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import GeneralForm from './GeneralForm';
 import {toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Link } from "react-router-dom";
 
 function AddEmailForm() {
     const navigate = useNavigate();
@@ -26,6 +27,9 @@ function AddEmailForm() {
             title="Add Email"
             showEmail={true}
             onSubmit={handleAddEmailSubmit}
+            bottomText={
+                <Link className="btn btn-primary" to="/settings">Back</Link>
+            }
         />
     );
 }

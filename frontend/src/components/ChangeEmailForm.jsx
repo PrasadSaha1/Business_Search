@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import GeneralForm from './GeneralForm';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Link } from "react-router-dom";
 
 function ChangeEmailForm() {
     const navigate = useNavigate();
@@ -31,7 +32,7 @@ function ChangeEmailForm() {
             showPassword={true}
             onSubmit={handleChangeEmailSubmit}
             bottomText={
-                <a className="btn btn-primary" href="/settings">Back</a>
+                <Link className="btn btn-primary" to="/settings">Back</Link>
             }
         />
         

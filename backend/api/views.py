@@ -34,6 +34,7 @@ def user_view(request):
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def forgot_username(request):
+    print("hi")
     email = request.data.get('email')
     users = User.objects.filter(email=email)
 

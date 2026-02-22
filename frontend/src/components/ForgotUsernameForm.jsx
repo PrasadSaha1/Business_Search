@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import GeneralForm from './GeneralForm';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Link } from "react-router-dom";
 
 function ForgotUsernameForm() {
     const handleForgotUsernameSubmit = async ({ email }) => {
@@ -28,10 +29,10 @@ function ForgotUsernameForm() {
             bottomText={
                 <>
                     <h6>
-                        Remember your username? Log in <a href="/login">here</a>.
+                        Remember your username? Log in <Link to="/login">here</Link>.
                     </h6>
                     <h6 style={{ marginTop: "15px" }}>
-                        Know your username but forgot your password? Click <a href="/forgot_password">here</a> to reset it.
+                        Know your username but forgot your password? Click <Link to="/forgot_password">here</Link> to reset it.
                     </h6>
                 </>
             }
