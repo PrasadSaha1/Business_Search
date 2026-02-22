@@ -3,7 +3,7 @@ import Base from '../components/Base';
 import api from '../api';
 import { getUser } from '../components/getUser';
 import { useState, useEffect } from 'react';
-import "../styles/settings.css";
+import "../styles/Settings.css";
 
 function DetermineEmail({email}) {
   /* Determines what the text for change email should be based on if one is provided. The logic doesn't change either way */
