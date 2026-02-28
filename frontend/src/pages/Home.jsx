@@ -1,13 +1,13 @@
 import "../styles/Home.css";
 import Base from '../components/Base';
 import { isAuthenticated } from '../components/checkAuth';
-import { getUser } from '../components/getUser';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import BusinessDisplay from '../components/BusinessDisplay'
 import { Link } from "react-router-dom";
 import api from '../api';
 
 function AccountButtons({ isLoggedIn }) {
+    // If not logged in show information about creating an account or logging ing
     if (!isLoggedIn) {
         return (
             <div>
@@ -22,14 +22,12 @@ function AccountButtons({ isLoggedIn }) {
                 </Link>
             </div>
         );
-    } else {
+    } else {  // If not logged in, return an empty div
         return <div></div>
     }
 }
 
 export default function Home() {
-    const [username, setUsername] = useState("");
-    const [email, setEmail] = useState("");
     const [errors, setErrors] = useState({});
     const [businesses, setBusinesses] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -38,24 +36,16 @@ export default function Home() {
     const businessLocationRef = useRef(null);
     const numBusinessRef = useRef(null);
 
-    useEffect(() => {
-        getUser().then(user => {
-            if (user) {
-                setUsername(user.username);
-                setEmail(user.email || "not provided");
-            }
-        });
-    }, []);
-
     const handleSubmit = async (e) => {
-        e.preventDefault();
+        e.preventDefault();  // prevent submission in cases there are errors
 
-        const businessType = businessTypeRef.current.value.trim();
+        const businessType = businessTypeRef.current.value.trim();  // Gets the user inputs
         const zipcode = businessLocationRef.current.value.trim();
         const numBusinesses = numBusinessRef.current.value.trim();
 
         const newErrors = {};
 
+        // Checks if the data is valid
         if (!businessType) newErrors.businessType = "Business type is required.";
         if (!zipcode) newErrors.zipcode = "Zipcode is required.";
         else if (!/^\d{5}$/.test(zipcode)) newErrors.zipcode = "Zipcode must be exactly 5 digits.";
@@ -64,21 +54,19 @@ export default function Home() {
         else if (Number(numBusinesses) > 10) newErrors.numBusinesses = "Number must be no more than 10.";
 
         if (Object.keys(newErrors).length > 0) {
-            setErrors(newErrors);
-            return;
+            setErrors(newErrors); // Gives the user errors
+            return;  // Exits the function
         }
 
-        setErrors({});
+        setErrors({});  // Clear errors and businesses
         setBusinesses([]); 
         setLoading(true);
 
-        const params = {
-            query: `${businessType} ${zipcode}`,
-            limit: Number(numBusinesses),
-        };
-        const toQueryString = (params) => new URLSearchParams(params).toString();
+        const params = {query: `${businessType} ${zipcode}`, limit: Number(numBusinesses),};
+        const toQueryString = (params) => new URLSearchParams(params).toString();  // formats the data into a string
 
         try {
+            // calls the API
             const response = await fetch(
                 `https://api.openwebninja.com/local-business-data/search?${toQueryString(params)}`,
                 {
@@ -106,7 +94,7 @@ export default function Home() {
                 filtered_data.push(business)
             });
 
-            // gets review data from this website's database (not the api)
+            // gets review data from LocalBizExplorer's database (not the api)
             const res = await api.post(
             'https://business-search-s130.onrender.com/api/view_business_rating/',
             { business_ids: business_ids }
@@ -127,6 +115,7 @@ export default function Home() {
 
 
         } catch (err) {
+            // Catch all for errors (ie. Rate limited by API)
             console.error("API call failed:", err);
         }
     };
@@ -139,13 +128,13 @@ export default function Home() {
                 <h4 className=" text-muted">Find information and reviews on businesses near you!</h4>
 
                 <form className="mt-5 w-100" style={{ maxWidth: "500px" }} onSubmit={handleSubmit}>
-                    <h3 className="mb-3">Type in the type of business</h3>
+                    <h3 className="mb-3">Enter in the type of business</h3>
 
                     <div className="mb-3">
                         <input
                             ref={businessTypeRef}
                             className="form-control"
-                            placeholder="Business Sector"
+                            placeholder="Business Sector (ie. Library)"
                         />
                         {errors.businessType && <p className="text-danger">{errors.businessType}</p>}
                     </div>
@@ -155,7 +144,7 @@ export default function Home() {
                             ref={businessLocationRef}
                             type="text"
                             className="form-control"
-                            placeholder="Zipcode"
+                            placeholder="Zipcode (ie. 05488)"
                         />
                         {errors.zipcode && <p className="text-danger">{errors.zipcode}</p>}
                     </div>
@@ -165,7 +154,7 @@ export default function Home() {
                             ref={numBusinessRef}
                             type="number"
                             className="form-control"
-                            placeholder="Number of Businesses to Display"
+                            placeholder="Number of Businesses to Display (max: 10)"
                         />
                         {errors.numBusinesses && <p className="text-danger">{errors.numBusinesses}</p>}
                     </div>
@@ -178,10 +167,7 @@ export default function Home() {
                 {loading && <div>Loading...</div>}  
             </div>
             <div
-            style={{
-            display: "grid",
-            rowGap: "20px",    // vertical gap between rows
-            }}>
+            style={{display: "grid",rowGap: "20px"}}>
             {businesses.map((business, index) => (
             <div key={index}>
                 <BusinessDisplay business={business} />

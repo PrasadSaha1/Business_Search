@@ -6,8 +6,9 @@ import LoadingIndicator from '../components/LoadingIndicator';
 
 function SavedBusinesses() {
   const [businesses, setBusinesses] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);  // Will show loading as needed
 
+  // Get all saved business data from the backend
   useEffect(() => {
     const getSavedBusinesses = async () => {
         setLoading(true);
@@ -18,7 +19,7 @@ function SavedBusinesses() {
     getSavedBusinesses(); 
   }, []);
 
-    if (loading){
+    if (loading){  // If loading, show the loading indicator
         return (
             <Base>
             <h1>Saved Businesses</h1>
@@ -31,6 +32,7 @@ return (
   <Base>
     <h1>Saved Businesses</h1>
 
+    {/* Only show when loading is finished */}
     {!loading &&
         businesses.length > 0 ? (
         businesses.map((business) => (

@@ -1,18 +1,19 @@
 .base-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  background-color: #212529;
-  color: white;
-  padding: 1rem;
-  z-index: 1000;
+  position: fixed; /* Keep header visible when scrolling */
+  top: 0;  /* Top of viewport */
+  left: 0; /* Left edge */
+  width: 100%; /* Full width */
+  background-color: #212529;  /* Dark background */
+  color: white; /* White text */
+  padding: 1rem; /* Inner spacing */
+  z-index: 1000;  /* The header should be above everything else*/
 }
+
 
 .header-content {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: space-between; /* Space out items horizontally */
+  align-items: center; /* Vertically center items */
 }
 
 /* Keep font size consistent */
@@ -46,11 +47,11 @@
   background-color: #f8f9fa;
   text-align: center;
   padding: 1rem 0;
-  margin-top: auto;
+  margin-top: auto;  /* Push to bottom */
 }
 
 .base-container {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; 
+  min-height: 100vh;  /* Must be at least full screen */
 }

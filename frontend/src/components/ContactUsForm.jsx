@@ -14,7 +14,7 @@ function ContactUsForm() {
             });
             toast.success("Message sent!")
         } catch (err) {
-            if (err.status === 401){
+            if (err.status === 401){  // Unauthorized from backend
                 toast.error("Invalid email address");
             } 
         } 

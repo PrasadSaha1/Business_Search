@@ -12,9 +12,9 @@ function ForgotPasswordForm() {
             });
             toast.success("An email has been sent to your address with instructions to reset your password.");
         } catch (err) {
-            if (err.status === 404){  
+            if (err.status === 404){  // Not Found from backend
                 toast.error("No email associated with this username.");
-            } else if (err.status === 400) {
+            } else if (err.status === 400) {  // Bad Request from backend
                 toast.error("Username does not exist");
             }
         }

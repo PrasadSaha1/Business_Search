@@ -15,7 +15,7 @@ function AddEmailForm() {
             });
             navigate('/settings'); // Redirect to home page after successful change
         } catch (err) {
-            if (err.status === 401){  // Error from the backend
+            if (err.status === 401){  // Error from the backend, 401 = Unauthorized
                 toast.error("Invalid email address");
             } 
         }

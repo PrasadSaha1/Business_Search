@@ -7,7 +7,7 @@
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  max-width: 400px;
+  max-width: 400px;  /* Only take up part of the screen */
 }
 
 .form-input {
@@ -25,9 +25,9 @@
   margin: 20px 0;
   background-color: #007bff;
   color: white;
-  border: none;
+  border: none;  /* Remove default border */
   border-radius: 4px;
-  cursor: pointer;
+  cursor: pointer; /* Pointer cursor on hover */
   transition: background-color 0.2s ease-in-out;
 }
 
@@ -36,9 +36,9 @@
 }
 
 .form-group {
-  width: 100%;
-  max-width: 400px;  /* Match your input width */
-  margin: 0 auto 20px auto;  /* Center the group and space below */
+  width: 100%;  
+  max-width: 400px;  
+  margin: 0 auto 20px auto; 
   text-align: left;
 }
 

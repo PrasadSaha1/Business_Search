@@ -1,3 +1,5 @@
+// Redirects users from pages that require an account
+
 import { NavLink, Navigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import api from "../api";

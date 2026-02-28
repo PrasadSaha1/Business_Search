@@ -1,3 +1,5 @@
+/* If a user already has an email, they will be redirected */
+
 import { Navigate } from "react-router-dom";
 import {useState, useEffect} from "react";
 import { getUser } from "./getUser";

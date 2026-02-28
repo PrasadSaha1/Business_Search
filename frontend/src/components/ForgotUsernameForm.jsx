@@ -13,7 +13,7 @@ function ForgotUsernameForm() {
             });
             toast.success("An email has been sent to your address with your username(s).");
         } catch (err) {
-            if (err.status === 404){
+            if (err.status === 404){  // Not Found from backend
                 toast.error("No account found with this email address.");
             }
         }

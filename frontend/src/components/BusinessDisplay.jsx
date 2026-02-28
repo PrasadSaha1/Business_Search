@@ -15,20 +15,19 @@ function saveBusiness({business, setIsSaved}) {
       phone_number: business.phone_number,
       website: business.website,
     });
-    setIsSaved(true);
+    setIsSaved(true);  // The save button will become an unsaved button
     toast.success("Business Saved!")
-
 }
 
 function unsaveBusiness({business, setIsSaved}) {
     const res = api.post("https://business-search-s130.onrender.com/api/unsave_business/",
     { business_id: business.id,});
-    setIsSaved(false);
+    setIsSaved(false);  // The unsave button will become a save button
     toast.success("Business Unsaved!")
 }
 
 function BusinessDisplay({ business, resetView = null }) {
-  const location = useLocation().pathname;
+  const location = useLocation().pathname;  //looks like /page_name
 
   const [reviewsPage_numReviews, setReviewsPage_numReviews] = useState(0);
   const [reviewsPage_averageRating, setReviewsPage_averageRating] = useState("");
@@ -43,7 +42,7 @@ function BusinessDisplay({ business, resetView = null }) {
     };
 
     const fetchAverageRating = async () => {
-      setLoading(true);
+        setLoading(true);  // as the average rating is getting fetched, loading will be displayed
         const res = await api.post(
           `https://business-search-s130.onrender.com/api/fetch_average_rating_and_save_status/`,
           { business_id: business.id }
@@ -77,25 +76,16 @@ function BusinessDisplay({ business, resetView = null }) {
       }}
     >
       <h3 style={{ marginTop: "10px", marginBottom: "5px" }}>{business.name}</h3>
-      <p>
-        <strong>Address:</strong> {business.address}
-      </p>
-      <p>
-        <strong>Phone:</strong> {business.phone_number}
-      </p>
+      <p><strong>Address:</strong> {business.address}</p>
+      <p><strong>Phone:</strong> {business.phone_number}</p>
       <p>
         <strong>Website:</strong>{" "}
-        <a
-          href={business.website}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ wordBreak: "break-word", color: "#007bff" }}
-        >
-          {business.website}
-        </a>
+        <a href={business.website} target="_blank" rel="noopener noreferrer"
+          style={{ wordBreak: "break-word", color: "#007bff" }}>
+          {business.website}</a>
       </p>
 
-      {/* Show reviews info */}
+      {/* If it's on the reviews page (more), show the dynamic ones, else, show the ones from the database */}
       <div>
         {location !== "/more" ? (
           <>
@@ -110,7 +100,7 @@ function BusinessDisplay({ business, resetView = null }) {
         )}
       </div>
 
-      {/* Action buttons */}
+      {/* Only show if not on the reviews page */}
       <div>
         {location !== "/more" && (
           <Link to="/more" state={{ business }}>
@@ -118,6 +108,7 @@ function BusinessDisplay({ business, resetView = null }) {
           </Link>
         )}
 
+        {/* If saved, show unsave. If unsaved, show saved. If not logged in, prompt the user to login.*/}
         {!isLoggedIn ? (
           <div>
             <Link to="/register">Create an Account</Link> or <Link to="/login">Log In</Link> to leave a review!

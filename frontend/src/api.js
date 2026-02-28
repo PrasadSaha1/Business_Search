@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from './constants';
-import { Link } from "react-router-dom";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL

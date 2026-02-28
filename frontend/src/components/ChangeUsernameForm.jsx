@@ -16,9 +16,9 @@ function ChangeUsernameForm() {
             });
             navigate('/settings'); // Redirect to home page after successful change
         } catch (err) {
-            if (err.status === 401){
+            if (err.status === 401){  // Unauthorized from backend
                 toast.error("Invalid password");
-            } else if (err.status === 409) {
+            } else if (err.status === 409) {  // Conflict from backend
                 toast.error("Username already taken");
             }
         }

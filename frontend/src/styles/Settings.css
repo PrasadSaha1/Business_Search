@@ -3,8 +3,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 50px auto;
-  padding: 20px;
+  margin: 50px auto;  /* Center container on page with vertical spacing */
+  padding: 20px;  /* Inner spacing for content */
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   max-width: 500px;

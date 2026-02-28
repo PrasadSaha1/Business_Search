@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 
 function ResetPasswordForm() {
     const navigate = useNavigate();
-    const { uid, token } = useParams();
+    const { uid, token } = useParams();  // Extract the user ID (uid) and reset token from the URL parameters
 
     const handleResetPassword = async ({ newPassword, confirmPassword }) => {
         if (newPassword.length < 8) {
@@ -27,7 +27,7 @@ function ResetPasswordForm() {
             });
             toast.success("Password reset successfully. You can now log in.");
             navigate('/login');
-        } catch (err) {
+        } catch (err) {  // Catch all 
             toast.error("An unknown error occured, please try again.")
         }
     };

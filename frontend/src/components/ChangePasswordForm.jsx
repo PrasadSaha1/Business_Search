@@ -18,11 +18,11 @@ function ChangePasswordForm() {
             });
             navigate('/settings'); // Redirect to home page after successful change
         } catch (err) {
-            if (err.status === 401){
+            if (err.status === 401){  // Unauthorized from backend
                 toast.error("Invalid current password");
-            } else if (err.status === 409) {
+            } else if (err.status === 409) {  // Conflict from backend
                 toast.error("Passwords do not match");
-            } else if (err.status === 400) {
+            } else if (err.status === 400) {  // Bad Request from backend
                 toast.error("New password must be at least 8 characters long");
             }
         }

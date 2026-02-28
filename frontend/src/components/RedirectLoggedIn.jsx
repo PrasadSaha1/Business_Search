@@ -1,3 +1,5 @@
+// This redirects the user from pages such as login, register, forgot_username, etc if they are logged in
+
 import { NavLink, Navigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import api from "../api";
@@ -11,7 +13,7 @@ function RedirectLoggedIn({ children }) {
         auth().catch(() => setIsAuthorized(false));
     }, []); 
 
-    // refreshes acces token automatically
+    // refreshes access token automatically
     const refreshToken = async () => {
         const refreshToken = localStorage.getItem(REFRESH_TOKEN);
         try { // trying to get new access token

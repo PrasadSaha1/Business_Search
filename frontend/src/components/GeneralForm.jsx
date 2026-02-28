@@ -61,6 +61,7 @@ function GeneralForm({
                         />
                     </div>
                 )}
+                {/* This would be true for Change Email form, as email must be first */}
                 {showEmailFirst && (
                     <div className="form-group">
                         <label className="input-description-label">New Email</label>
