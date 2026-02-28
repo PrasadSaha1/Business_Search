@@ -1,63 +1,144 @@
-function BusinessDisplay({ businesses }) {
+import { Link } from "react-router-dom";
+import api from '../api';
+import { useLocation } from "react-router-dom";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useState, useEffect } from "react";
+import LoadingIndicator from "../components/LoadingIndicator";
+import { isAuthenticated } from "./checkAuth";
+
+function saveBusiness({business, setIsSaved}) {
+    const res = api.post("https://business-search-s130.onrender.com/api/save_business/",
+    { business_id: business.id,
+      name: business.name,
+      address: business.address,
+      phone_number: business.phone_number,
+      website: business.website,
+    });
+    setIsSaved(true);
+    toast.success("Business Saved!")
+
+}
+
+function unsaveBusiness({business, setIsSaved}) {
+    const res = api.post("https://business-search-s130.onrender.com/api/unsave_business/",
+    { business_id: business.id,});
+    setIsSaved(false);
+    toast.success("Business Unsaved!")
+}
+
+function BusinessDisplay({ business, resetView = null }) {
+  const location = useLocation().pathname;
+
+  const [reviewsPage_numReviews, setReviewsPage_numReviews] = useState(0);
+  const [reviewsPage_averageRating, setReviewsPage_averageRating] = useState("");
+  const [isSaved, setIsSaved] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(null);
+
+  useEffect(() => {
+    const fetchAuthStatus = async () => {
+        const authStatus = await isAuthenticated(); 
+        setIsLoggedIn(authStatus);
+    };
+
+    const fetchAverageRating = async () => {
+      setLoading(true);
+        const res = await api.post(
+          `https://business-search-s130.onrender.com/api/fetch_average_rating_and_save_status/`,
+          { business_id: business.id }
+        );
+
+        setReviewsPage_numReviews(res.data.num_reviews);
+        setReviewsPage_averageRating(res.data.average_rating);
+        setIsSaved(res.data.is_saved);
+        setLoading(false);
+    };
+
+    fetchAverageRating();
+    fetchAuthStatus();
+  }, [business.id, resetView]);
+
+  if (loading) {
+    return (
+      <LoadingIndicator />
+    );
+  }
+
   return (
     <div
-      className="business-grid"
-style={{
-  display: "grid",
-  gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-  columnGap: "30px", // horizontal gap between columns
-  rowGap: "20px",    // vertical gap between rows
-  justifyItems: "center" // center cards if a row has fewer items
-}}
-
+      style={{
+        border: "1px solid #ccc",
+        borderRadius: "10px",
+        padding: "15px",
+        boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+        backgroundColor: "#fff",
+        width: "100%",
+      }}
     >
-      {businesses.map((business, index) => (
-        <div
-          key={index}
-          className="business-card"
-          style={{
-            border: "1px solid #ccc",
-            borderRadius: "10px",
-            padding: "15px",
-            boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
-            backgroundColor: "#fff",
-            width: "100%",           // take full column width
-            maxWidth: "320px"        // optional: card max width
-          }}
+      <h3 style={{ marginTop: "10px", marginBottom: "5px" }}>{business.name}</h3>
+      <p>
+        <strong>Address:</strong> {business.address}
+      </p>
+      <p>
+        <strong>Phone:</strong> {business.phone_number}
+      </p>
+      <p>
+        <strong>Website:</strong>{" "}
+        <a
+          href={business.website}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ wordBreak: "break-word", color: "#007bff" }}
         >
-          {/* Image */}
-          {business.photos_sample?.[0]?.photo_url_large && (
-            <img
-              src={business.photos_sample[0].photo_url_large}
-              alt={business.name}
-              style={{
-                width: "100%",
-                height: "200px",
-                objectFit: "cover",
-                borderRadius: "8px",
-              }}
-            />
-          )}
+          {business.website}
+        </a>
+      </p>
 
-          {/* Details */}
-          <h3 style={{ marginTop: "10px", marginBottom: "5px" }}>
-            {business.name}
-          </h3>
-          <p><strong>Address:</strong> {business.address}</p>
-          <p><strong>Phone:</strong> {business.phone_number}</p>
-          <p>
-            <strong>Website:</strong>{" "}
-            <a
-              href={business.website}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ wordBreak: "break-word", overflowWrap: "anywhere", color: "#007bff" }}
-            >
-              {business.website}
-            </a>
-          </p>
-        </div>
-      ))}
+      {/* Show reviews info */}
+      <div>
+        {location !== "/more" ? (
+          <>
+            <p>Number of Reviews: {business.num_reviews}</p>
+            <p>Average Rating: {business.average_rating_display}</p>
+          </>
+        ) : (
+          <>
+            <p>Number of Reviews: {reviewsPage_numReviews}</p>
+            <p>Average Rating: {reviewsPage_averageRating}</p>
+          </>
+        )}
+      </div>
+
+      {/* Action buttons */}
+      <div>
+        {location !== "/more" && (
+          <Link to="/more" state={{ business }}>
+            <button className="btn btn-primary btn-md me-2">View Reviews</button>
+          </Link>
+        )}
+
+        {!isLoggedIn ? (
+          <div>
+            <Link to="/register">Create an Account</Link> or <Link to="/login">Log In</Link> to leave a review!
+          </div>
+        ) : isSaved ? (
+          <button
+            className="btn btn-warning btn-md"
+            onClick={() => unsaveBusiness({ business, setIsSaved })}
+          >
+            Unsave
+          </button>
+        ) : (
+          <button
+            className="btn btn-success btn-md"
+            onClick={() => saveBusiness({ business, setIsSaved })}
+          >
+            Save
+          </button>
+        )}
+
+      </div>
     </div>
   );
 }

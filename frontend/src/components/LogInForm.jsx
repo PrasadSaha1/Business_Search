@@ -14,6 +14,8 @@ function LogInForm() {
             const res = await api.post("api/token/", { username, password });
             localStorage.setItem(ACCESS_TOKEN, res.data.access);
             localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
+
+            toast.success("Logged in successfully!")
             navigate('/'); // go to the homescreen
         } catch (err) {
             const data = err.response?.data;

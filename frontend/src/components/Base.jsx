@@ -10,6 +10,7 @@ export default function Base({ children }) {
           <h1 className="brand-title">My App</h1>
           <nav className="nav-links">
             <Link to="/">Home</Link>
+            <Link to="/saved_businesses">Saved Businesses</Link>
             <Link to="/settings">Settings</Link>
           </nav>
         </div>

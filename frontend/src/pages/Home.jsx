@@ -5,18 +5,13 @@ import { getUser } from '../components/getUser';
 import { useState, useEffect, useRef } from 'react';
 import BusinessDisplay from '../components/BusinessDisplay'
 import { Link } from "react-router-dom";
+import api from '../api';
 
-function AccountButtons({ isLoggedIn, name, email }) {
-    if (isLoggedIn) {
+function AccountButtons({ isLoggedIn }) {
+    if (!isLoggedIn) {
         return (
             <div>
-                <h2>Welcome {name}</h2>
-            </div>
-        );
-    } else {
-        return (
-            <div>
-                <h3>Create an account to get started</h3>
+                <h3>Create an account to unlock more features</h3>
                 <Link to="/register">
                     <button className="btn btn-primary btn-lg">Create Account</button>
                 </Link>
@@ -27,6 +22,8 @@ function AccountButtons({ isLoggedIn, name, email }) {
                 </Link>
             </div>
         );
+    } else {
+        return <div></div>
     }
 }
 
@@ -35,6 +32,7 @@ export default function Home() {
     const [email, setEmail] = useState("");
     const [errors, setErrors] = useState({});
     const [businesses, setBusinesses] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     const businessTypeRef = useRef(null);
     const businessLocationRef = useRef(null);
@@ -72,6 +70,7 @@ export default function Home() {
 
         setErrors({});
         setBusinesses([]); 
+        setLoading(true);
 
         const params = {
             query: `${businessType} ${zipcode}`,
@@ -84,25 +83,48 @@ export default function Home() {
                 `https://api.openwebninja.com/local-business-data/search?${toQueryString(params)}`,
                 {
                     headers: {
-                        "x-api-key": "ak_vo1m23fzgwm4mesnikrk0ojzqfexv7t257j0ripmcf7a2ew",
+                        "x-api-key": "ak_i4l83v73nz5cdg30ge9nqm85n821k16y8hpdydvse86me2o",
                     },
                 }
             );
 
-            const data = await response.json();
-            var formatted_data = []
+            const api_data = await response.json();
+            var filtered_data = []
+            var business_ids = []
             
-            data.data.forEach(element => { 
+            // takes the api data and puts it into filtered_data
+            api_data.data.forEach(element => { 
                 var business = {}
-                business.photo_url = element.photos_sample?.[0]?.photo_url_large
+                business.id = element.business_id;
+                business.photo_url = element.photos_sample?.[0]?.photo_url_large;
                 business.address = element.address;
                 business.phone_number = element.phone_number;
                 business.name = element.name;
                 business.website = element.website;
-                formatted_data.push(business)
+
+                business_ids.push(element.business_id)
+                filtered_data.push(business)
             });
 
-            setBusinesses(formatted_data);
+            // gets review data from this website's database (not the api)
+            const res = await api.post(
+            'https://business-search-s130.onrender.com/api/view_business_rating/',
+            { business_ids: business_ids }
+            );
+
+            const business_review_data = res.data.business_review_data;
+
+            // for each business in filtered_data, it adds more information, and i++ moves to the next business
+            var i = 0;
+            filtered_data.forEach(business =>{
+                business.num_reviews = business_review_data[i]["num_reviews"]
+                business.average_rating_display = business_review_data[i]["average_rating_display"]
+                i++
+            })
+
+            setBusinesses(filtered_data);
+            setLoading(false);
+
 
         } catch (err) {
             console.error("API call failed:", err);
@@ -112,15 +134,9 @@ export default function Home() {
 
     return (
         <Base>
-            <div className="d-flex flex-column align-items-center text-center py-5">
+            <div className="home-container">
                 <h1 className="mb-3">Welcome to the Website</h1>
-                <h4 className="mb-5 text-muted">This is the Website Description</h4>
-
-                <AccountButtons
-                    isLoggedIn={isAuthenticated()}
-                    name={username}
-                    email={email}
-                />
+                <h4 className=" text-muted">This is the Website Description</h4>
 
                 <form className="mt-5 w-100" style={{ maxWidth: "500px" }} onSubmit={handleSubmit}>
                     <h3 className="mb-3">Type in the type of business</h3>
@@ -159,8 +175,24 @@ export default function Home() {
                     </button>
 
                 </form>
+                {loading && <div>Loading...</div>}  
             </div>
-            <BusinessDisplay businesses={businesses}></BusinessDisplay>
+            <div
+            style={{
+            display: "grid",
+            rowGap: "20px",    // vertical gap between rows
+            }}>
+            {businesses.map((business, index) => (
+            <div key={index}>
+                <BusinessDisplay business={business} />
+            </div>
+            ))}
+
+             <div className="home-container">
+                <AccountButtons isLoggedIn={isAuthenticated()}/>
+            </div>
+            
+            </div>
         </Base>
     );
 }

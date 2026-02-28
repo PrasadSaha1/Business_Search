@@ -3,7 +3,8 @@ import { jwtDecode } from "jwt-decode";
 import api from "../api";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
 import {useState, useEffect} from "react";
-
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function RedirectLoggedOut({ children }) {
     const [isAuthorized, setIsAuthorized] = useState(null);
@@ -32,6 +33,7 @@ function RedirectLoggedOut({ children }) {
     const auth = async () => {
         const token = localStorage.getItem(ACCESS_TOKEN);  // if there's a token
         if (!token) {
+            toast.error("Must be logged in!")
             setIsAuthorized(false);
             return;
         }

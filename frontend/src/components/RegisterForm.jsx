@@ -24,6 +24,8 @@ function RegisterForm() {
             const loginRes = await api.post("api/token/", { username, password });
             localStorage.setItem(ACCESS_TOKEN, loginRes.data.access);
             localStorage.setItem(REFRESH_TOKEN, loginRes.data.refresh);
+
+            toast.success("Account Created successfully!")
             navigate('/');
         } catch (err) {
             const data = err.response?.data;

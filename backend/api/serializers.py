@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
+from .models import Review, GlobalBusiness
 import re
 
 class UserSerializer(serializers.ModelSerializer):
@@ -37,3 +38,23 @@ class UserSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(**validated_data)
         return user
 
+class ReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Review
+        fields = ["id", "business", "name", "rating", "review_text", "created_at"]
+
+class GlobalBusinessSerializer(serializers.ModelSerializer):
+    num_reviews = serializers.IntegerField(read_only=True)
+    average_rating = serializers.FloatField(read_only=True)
+    average_rating_display = serializers.SerializerMethodField()
+
+    class Meta:
+        model = GlobalBusiness
+        fields = ["id", "name", "address", "phone_number", "website", "num_reviews", "average_rating", "average_rating_display"]
+
+    def get_average_rating_display(self, obj):
+        """This turns the average rating from a number or null to a formatted string"""
+        if obj.average_rating is None:
+            return "N/A"
+        return f"{obj.average_rating}/5"
+    

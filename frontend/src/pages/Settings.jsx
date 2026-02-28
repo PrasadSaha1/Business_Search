@@ -5,6 +5,7 @@ import { getUser } from '../components/getUser';
 import { useState, useEffect } from 'react';
 import "../styles/Settings.css";
 import { Link } from "react-router-dom";
+import LoadingIndicator  from "../components/LoadingIndicator";
 
 function DetermineEmail({email}) {
   /* Determines what the text for change email should be based on if one is provided. The logic doesn't change either way */
@@ -23,19 +24,22 @@ export default function Settings() {
     const navigate = useNavigate();
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        getUser().then(user => {
-            if (user) {
-                setUsername(user.username);
-                if (user.email) {
-                    setEmail(user.email);
-                } else {
-                    setEmail("Not Provided");
-                }
-            } 
-        });
+      const fetchUser = async () => {
+        setLoading(true);
+          const user = await getUser(); 
+          if (user) {
+            setUsername(user.username);
+            setEmail(user.email || "Not Provided");
+          }
+          setLoading(false); 
+      };
+
+      fetchUser();
     }, []);
+
 
 
   const handleLogout = () => {
@@ -54,6 +58,14 @@ export default function Settings() {
         localStorage.clear();
         navigate('/');  // go to the home page
     };
+
+  if (loading) {
+    return (
+      <Base>
+      <LoadingIndicator />
+      </Base>
+    );
+  }
 
   return (
     <Base>

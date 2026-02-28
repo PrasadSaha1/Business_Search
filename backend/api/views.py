@@ -1,18 +1,24 @@
 from django.core.mail import send_mail
 from django.contrib.auth.models import User
-from rest_framework import generics
-from .serializers import UserSerializer
+from django.http import Http404
+from rest_framework import generics, permissions
+from .serializers import UserSerializer, ReviewSerializer, GlobalBusinessSerializer
+from .models import Review, GlobalBusiness, SavedBusiness
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from django.conf import settings
+from django.shortcuts import get_object_or_404
 from django.contrib.auth import authenticate
 import re
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.models import AnonymousUser as AnnoymousUser
-
+from django.db.models import Avg, Count
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.response import Response
 # In every view, api_view["GET"] means that the data will be viewed, while POST means that data will be created 
 # permissions_classes[IsAuthenticated] means that the user must be logged in to access the view, while AllowAny means that anyone can access the view
 
@@ -20,6 +26,64 @@ class CreateUserView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [AllowAny]
+
+class CreateReviewView(generics.CreateAPIView):
+    serializer_class = ReviewSerializer
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        # Get business data from frontend
+        business_id = request.data.get("business_id")
+        business_name = request.data.get("business_name")
+        business_address = request.data.get("business_address", "")
+        business_phone = request.data.get("business_phone", "")
+        business_website = request.data.get("business_website", "")
+        name = request.data.get("name")
+        rating = request.data.get("rating")
+        review_text = request.data.get("review_text")
+        
+
+        # Check if GlobalBusiness exists, if not, create it
+        business, created = GlobalBusiness.objects.get_or_create(
+            id=business_id,
+            defaults={
+                "name": business_name,
+                "address": business_address,
+                "phone_number": business_phone,
+                "website": business_website,
+            }
+        )
+
+        # Create the review
+        review = Review.objects.create(
+            business=business,
+            name=name,
+            rating=rating,
+            review_text=review_text,
+            user=request.user
+        )
+
+        serializer = ReviewSerializer(review)
+
+        return Response(serializer.data)
+
+class BusinessReviewsView(generics.ListAPIView):
+    serializer_class = ReviewSerializer
+    permission_classes = [permissions.AllowAny] 
+
+    def get_queryset(self):
+        business_id = self.kwargs.get("business_id")
+        return Review.objects.filter(business__id=business_id).order_by("-created_at")
+
+
+@api_view(["GET"])
+@permission_classes([AllowAny])  
+def check_login(request):
+    if request.user.is_authenticated:
+        return Response({"logged_in": True})
+    else:
+        return Response({"logged_in": False})
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -34,7 +98,7 @@ def user_view(request):
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def forgot_username(request):
-    print("hi")
+    print('hi')
     email = request.data.get('email')
     users = User.objects.filter(email=email)
 
@@ -199,3 +263,116 @@ def contact_us(request):
     )
 
     return Response({'detail': 'Message sent'})
+
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+def view_business_rating(request):
+    """This view gets the average rating and number of reviews when a user searches for businsses on the home page"""
+    business_ids = request.data.get("business_ids")
+
+    # matches each business id to a business, and gets the number of reviews and average rating
+    businesses = (
+        GlobalBusiness.objects.filter(id__in=business_ids).annotate(
+            num_reviews=Count("reviews"),
+            avg_rating=Avg("reviews__rating")
+        ))
+
+    business_map = {business.id: business for business in businesses}  # creates an id-business dict 
+
+    business_review_data = []  # to be sent to frontend
+
+    for business_id in business_ids:
+        if business_id in business_map:  # if it's not, then it's not in database yet, meaning there's zero reviews
+            business = business_map[business_id]
+
+            if business.num_reviews == 0:  # if no reviews
+                business_review_data.append({"num_reviews": 0, "average_rating_display": "N/A"})
+            else:  # a dictionary with the information
+                business_review_data.append({"num_reviews": business.num_reviews, "average_rating_display": f"{business.avg_rating} / 5"})
+        else:
+            business_review_data.append({"num_reviews": 0, "average_rating_display": "N/A"})
+
+    return Response({'business_review_data': business_review_data})
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+def check_if_review_left(request):
+    """This checks if a user has left a review on a business"""
+    business_id = request.data.get("business_id")
+    
+    try:
+        business = get_object_or_404(GlobalBusiness, id=business_id)
+        if not request.user.is_authenticated:
+            return Response({"review": False})
+
+        try:
+            review = Review.objects.get(business=business, user=request.user)
+            serializer = ReviewSerializer(review)
+            return Response({"review": serializer.data})
+        except Review.DoesNotExist:
+            return Response({"review": False})
+    except Http404:
+        return Response({"review": False})
+    
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def save_business(request):
+    business_id = request.data.get("business_id")
+    name = request.data.get("name")
+    address = request.data.get("address")
+    phone_number = request.data.get("phone_number")
+    website = request.data.get("website")
+
+    business, created = GlobalBusiness.objects.get_or_create(
+        id=business_id, name=name, address=address, phone_number=phone_number, website=website)
+    SavedBusiness.objects.get_or_create(business=business, user=request.user)
+
+    return Response({"message": "success!"})
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def unsave_business(request):
+    business_id = request.data.get("business_id")
+    SavedBusiness.objects.filter(business_id=business_id, user=request.user).delete()
+    return Response({"message": "success!"})
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_saved_businesses(request):
+    businesses = (GlobalBusiness.objects.filter(saved_business__user=request.user).annotate(
+                num_reviews=Count("reviews"), average_rating=Avg("reviews__rating")))
+    serializer = GlobalBusinessSerializer(businesses, many=True)
+    return Response(serializer.data)
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def delete_review(request):
+    id = request.data.get("review_id")
+    Review.objects.get(id=id).delete()
+    return Response({"message": "success!"})
+
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+def fetch_average_rating_and_save_status(request):
+    """This is only called on the reviews page, and is called to dynamically update the info when the user makes/deletes a view"""
+    business_id = request.data.get("business_id")
+    
+    try:
+        business = GlobalBusiness.objects.get(id=business_id)
+        stats = business.reviews.aggregate(num_reviews=Count('id'),average_rating=Avg('rating'))
+        if request.user.is_authenticated:
+            is_saved = SavedBusiness.objects.filter(user=request.user,business_id=business_id).exists()
+        else:
+            is_saved = "not_logged_in"
+
+        if stats["num_reviews"] == 0:
+            return Response({"num_reviews": 0, "average_rating": "N/A", "is_saved": is_saved})
+        average_rating = f"{stats['average_rating']} / 5"
+        return Response({"num_reviews": stats["num_reviews"], "average_rating": average_rating, "is_saved": is_saved})
+    except GlobalBusiness.DoesNotExist:
+         return Response({"num_reviews": 0, "average_rating": "N/A", "is_saved": False})

@@ -14,3 +14,13 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   max-width: 500px;
 }
+
+.home-container{
+  display: flex;
+  flex-direction: column; 
+  align-items: center;    
+  text-align: center;    
+  padding-top: 3rem;      
+  padding-bottom: 3rem;
+  gap: 1rem;           
+}

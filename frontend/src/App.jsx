@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Home from './pages/Home';
+import More from './pages/More';
 import ForgotUsername from './pages/ForgotUsername';
 import ForgotPassword from './pages/ForgotPassword';
 import RedirectLoggedIn from './components/RedirectLoggedIn';
@@ -16,6 +17,7 @@ import ChangeEmail from './pages/ChangeEmail';
 import RedirectEmailGiven from './components/RedirectEmailGiven';
 import ResetPassword from './pages/ResetPassword';
 import ContactUs from './pages/ContactUs';
+import SavedBusinesses from './pages/SavedBusinesses';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -87,8 +89,15 @@ function App() {
         </RedirectLoggedOut>
       } />
 
+      <Route path="/saved_businesses" element={
+        <RedirectLoggedOut>
+          <SavedBusinesses />
+        </RedirectLoggedOut>
+      } />
+
       <Route path="/reset_password/:uid/:token" element={<ResetPassword />} />
       <Route path="/" element={<Home />} />
+      <Route path="/more" element={<More />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
     <ToastContainer
