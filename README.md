@@ -1,2 +1,9 @@
 Hello there! I'm Prasad Saha, and this is my submission for NYS FBLA Coding & Progamming 2026. 
-Here is a link to the deployed website: https://business-search-frontend.onrender.com/
+<br> Here is a link to the deployed website: https://business-search-frontend.onrender.com/
+
+<b>Notes</b> 
+<br> The app is currently called LocalBizExplorer, but originally, it was BusinessSearch. This is reflected in some areas (ie. website URL)
+
+
+
+<br>[Dependencies](./dependencies.md)
