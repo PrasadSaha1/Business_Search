@@ -135,8 +135,8 @@ export default function Home() {
     return (
         <Base>
             <div className="home-container">
-                <h1 className="mb-3">Welcome to the Website</h1>
-                <h4 className=" text-muted">This is the Website Description</h4>
+                <h1 className="mb-3">Welcome to LocalBizExplorer</h1>
+                <h4 className=" text-muted">Find information and reviews on businesses near you!</h4>
 
                 <form className="mt-5 w-100" style={{ maxWidth: "500px" }} onSubmit={handleSubmit}>
                     <h3 className="mb-3">Type in the type of business</h3>

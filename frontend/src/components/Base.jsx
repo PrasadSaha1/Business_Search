@@ -7,7 +7,7 @@ export default function Base({ children }) {
     <div className="base-container">
       <header className="base-header">
         <div className="header-content">
-          <h1 className="brand-title">My App</h1>
+          <h1 className="brand-title">LocalBizExplorer</h1>
           <nav className="nav-links">
             <Link to="/">Home</Link>
             <Link to="/saved_businesses">Saved Businesses</Link>
@@ -21,7 +21,7 @@ export default function Base({ children }) {
       </main>
 
       <footer className="base-footer">
-        <p className="mb-0">&copy; 2026 Website Inc.</p>
+        <p className="mb-0">&copy; 2026 LocalBizExplorer Inc.</p>
       </footer>
     </div>
   );
