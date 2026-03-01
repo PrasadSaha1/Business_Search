@@ -84,7 +84,7 @@ function GeneralForm({
                         type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        placeholder="Password"
+                        placeholder="Password (8+ characters)"
                         />
                     </div>
                 )}
@@ -96,7 +96,7 @@ function GeneralForm({
                             type="password"
                             value={newPassword}
                             onChange={(e) => setNewPassword(e.target.value)}
-                            placeholder="New Password"
+                            placeholder="New Password (8+ characters)"
                         />
                     </div>
                 )}

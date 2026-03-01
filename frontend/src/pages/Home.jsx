@@ -71,7 +71,7 @@ export default function Home() {
                 `https://api.openwebninja.com/local-business-data/search?${toQueryString(params)}`,
                 {
                     headers: {
-                        "x-api-key": "ak_i4l83v73nz5cdg30ge9nqm85n821k16y8hpdydvse86me2o",
+                        "x-api-key": "ak_ypnr6hs38cqy5qpdnaprhijkw8xsp0f6kzgbdeesm9cn9ly",
                     },
                 }
             );

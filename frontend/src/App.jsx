@@ -18,6 +18,8 @@ import RedirectEmailGiven from './components/RedirectEmailGiven';
 import ResetPassword from './pages/ResetPassword';
 import ContactUs from './pages/ContactUs';
 import SavedBusinesses from './pages/SavedBusinesses';
+import Help from './pages/Help';
+import FAQ from './pages/FAQ';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -84,9 +86,7 @@ function App() {
       } />
 
       <Route path="/contact_us" element={
-        <RedirectLoggedOut>
           <ContactUs />
-        </RedirectLoggedOut>
       } />
 
       <Route path="/saved_businesses" element={
@@ -98,6 +98,8 @@ function App() {
       <Route path="/reset_password/:uid/:token" element={<ResetPassword />} />
       <Route path="/" element={<Home />} />
       <Route path="/more" element={<More />} />
+      <Route path="/help" element={<Help />} />
+      <Route path="/faq" element={<FAQ />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
     <ToastContainer

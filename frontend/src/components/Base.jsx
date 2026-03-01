@@ -11,6 +11,8 @@ export default function Base({ children }) {
           <nav className="nav-links">
             <Link to="/">Home</Link>
             <Link to="/saved_businesses">Saved Businesses</Link>
+            <Link to="/help">Help</Link>
+            <Link to="/faq">FAQ</Link>
             <Link to="/settings">Settings</Link>
           </nav>
         </div>

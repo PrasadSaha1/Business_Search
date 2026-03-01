@@ -1,0 +1,43 @@
+.help-container {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    width: 100%;
+    margin-bottom: 50px;
+
+    /* Center everything */
+    display: flex;
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center; 
+    text-align: center; 
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px; /* height of heaer to allow for scrolling */
+}
+
+.jump-links {
+  list-style: none;  /* Removes bullets */
+  padding: 0; /* Removes left padding */
+  margin: 0;
+}
+
+.jump-links li {
+  margin: 10px 0; /* Space between links */
+}
+
+.jump-links a {
+  color: #007bff;
+  text-decoration: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.jump-links a:hover {
+  text-decoration: underline;
+}
+
